@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE note SYSTEM 'xmlschemas/domino_8_5_3.dtd'>
+<note default='true' class='view' xmlns='http://www.lotus.com/dxl' version='8.5'
+ maintenanceversion='3.0' replicaid='C225797A0044619D'>
+<noteinfo noteid='11a' unid='2BE10E8284AA65FAC225797A004461A4' sequence='1'>
+<created><datetime>20120103T142654,44+02</datetime></created>
+<modified><datetime>20120103T142654,47+02</datetime></modified>
+<revised><datetime>20120103T142654,46+02</datetime></revised>
+<lastaccessed><datetime>20120309T142845,18+02</datetime></lastaccessed>
+<addedtofile><datetime>20120103T142654,46+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Serdar Basegmez/O=developi</name></updatedby>
+<item name='$TITLE'><text/></item>
+<item name='$Formula' summary='true'><formula compiled='true'>
+HAAFAA4ACgABAAQAJCQkJAQABAAAAAgAZgADAA==
+</formula></item>
+<item name='$FormulaClass'><text>1</text></item></note>
+

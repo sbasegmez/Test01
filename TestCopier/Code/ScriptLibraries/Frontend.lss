@@ -1,0 +1,298 @@
+'++LotusScript Development Environment:2:5:(Options):0:74
+%REM
+	Library Frontend
+	Created Jan 3, 2012 by Serdar Basegmez/developi
+	Description: Comments for Library
+%END REM
+Option Public
+Option Declare
+
+
+'++LotusScript Development Environment:2:5:(Forward):0:1
+Declare Sub Initialize
+Declare Sub CountForms
+Declare Sub fPostOpen(Source As NotesUIDocument)
+Declare Sub Start
+Declare Sub SelectSource()
+Declare Function CheckConfig() As Boolean
+Declare Function SelectDB(fieldPrefix As String, msgPrompt As String) As Boolean
+Declare Function GetFormNames(db As NotesDatabase) As Variant
+Declare Function CopyDocumentsByForm(dbSource As NotesDatabase, dbTarget As NotesDatabase, FormName As String, Percent As Single) As Boolean
+
+'++LotusScript Development Environment:2:5:(Declarations):0:10
+%Include "lsconst.lss" 
+%Include "lserr.lss"
+
+Const PROMPT_CHOOSEDATABASE=13
+Const FORMSROWCOUNT=10
+
+Dim session As NotesSession
+Dim ws As NotesUIWorkspace
+Dim dbcurrent As NotesDatabase
+Dim doc As NotesDocument
+Dim uidoc As NotesUIDocument
+
+Dim isDBSelected As Boolean
+
+
+'++LotusScript Development Environment:2:2:Initialize:1:10
+Sub Initialize
+	isDBSelected=False
+End Sub
+
+'++LotusScript Development Environment:2:2:CountForms:1:8
+Sub CountForms
+	On Error Goto err_hand
+
+	Dim i As Integer
+	Dim FormName As string
+	Dim docs As NotesDocumentCollection
+	
+	Dim dbSource As NotesDatabase
+	
+	Set dbSource=session.getDatabase(doc.SourceDBServer(0), doc.SourceDBFilePath(0), False)
+
+	For i=1 To FORMSROWCOUNT
+		FormName=doc.getItemValue("sForm_" & i)(0)
+		If FormName<>"" Then
+			Set docs=dbSource.Search(|Form="|+FormName+|"|, Nothing, 0)
+			Call doc.ReplaceItemValue("sCount_" & i, docs.count)
+		End If
+	Next
+	
+exit_hand:
+	Exit Sub
+err_hand:
+	On Error Resume Next
+	
+	If Err>0 Then
+		Messagebox Getthreadinfo(10) & ">>>" & Getthreadinfo(1) & " : Error on Line:" & Cstr(Erl) & " ( " & Err & ": " & Error$ & " )"
+		Resume exit_hand
+	End If
+
+End Sub
+
+
+'++LotusScript Development Environment:2:2:fPostOpen:1:12
+Sub fPostOpen(Source As NotesUIDocument)
+	Set session = New NotesSession
+	Set ws = New NotesUIWorkspace
+	
+	Set dbcurrent=session.currentdatabase
+	Set uidoc=Source
+	Set doc=Source.Document
+End Sub
+
+
+'++LotusScript Development Environment:2:2:Start:1:8
+Sub Start
+	On Error Goto err_hand
+	
+	If Not CheckConfig() Then Exit Sub
+	
+	Dim i As Integer
+	Dim logItem As NotesItem
+	Dim formList
+	Dim FormName As String, Percent As single
+	Dim ProcessedForms List As Boolean
+
+	Set logItem=doc.replaceItemValue("Log", "")
+
+	Dim dbSource As NotesDatabase
+	Dim dbTarget As NotesDatabase
+	
+	Set dbSource=session.getDatabase(doc.SourceDBServer(0), doc.SourceDBFilePath(0), False)
+	Set dbTarget=dbSource.CreateCopy(doc.TargetDBServer(0), doc.TargetDBFilePath(0))
+	
+	dbTarget.Title=doc.TargetDBTitle(0)
+	
+	Call logItem.AppendToTextList("Database has been created")
+	
+	For i=1 To FORMSROWCOUNT
+		FormName=doc.getItemValue("sForm_" & i)(0)
+		Percent=doc.getItemValue("sPercent_" & i)(0)
+		
+		If FormName<>"" Then
+			ProcessedForms(FormName)=True
+			If CopyDocumentsByForm(dbSource, dbTarget, FormName, Percent) then
+				Call logItem.AppendToTextList("Form:'"+FormName+"' has been copied...")
+			else		
+				Call logItem.AppendToTextList("Form:'"+FormName+"': Failed copying...")
+			End If
+		End If
+	Next
+	
+exit_hand:
+	Exit Sub
+err_hand:
+	On Error Resume Next
+	
+	If Err>0 Then
+		Messagebox Getthreadinfo(10) & ">>>" & Getthreadinfo(1) & " : Error on Line:" & Cstr(Erl) & " ( " & Err & ": " & Error$ & " )"
+		Resume exit_hand
+	End If
+
+End Sub
+
+
+
+'++LotusScript Development Environment:2:2:SelectSource:1:8
+Sub SelectSource()
+	On Error Goto err_hand
+	
+	Dim dbSource As NotesDatabase
+	Dim i As Integer
+	
+	If isDbSelected Then
+		If MessageBox("Your previous selection will be deleted. Are you sure?", 32+1, "Warning")<>IDOK Then
+			Exit sub
+		End If
+	End If
+	
+	If Not SelectDb("SourceDB", "Please select the source database") Then Exit sub
+	
+	Call doc.ReplaceItemValue("TargetDBTitle", "Test - "+doc.SourceDBTitle(0))
+	Call doc.ReplaceItemValue("TargetDBServer", doc.SourceDBServer(0))
+	Call doc.ReplaceItemValue("TargetDBFilePath", "test\"+doc.SourceDBFilePath(0))
+	
+	Set dbSource=session.getDatabase(doc.SourceDBServer(0), doc.SourceDBFilePath(0), False)
+
+	Call doc.replaceItemValue("FormList", GetFormNames(dbSource))
+	Call doc.replaceItemValue("CopyAllOthers", "")
+	Call doc.replaceItemValue("CopyProfiles", "")
+	
+	For i=1 To FORMSROWCOUNT
+		Call doc.replaceItemValue("sForm_" & i, "")
+		Call doc.replaceItemValue("sPercent_" & i, 0.2)
+		Call doc.replaceItemValue("sCount_" & i, "")
+	Next
+	
+	isDbSelected=true
+	
+	Call uidoc.refresh
+exit_hand:
+	Exit Sub
+err_hand:
+	On Error Resume Next
+	
+	If Err>0 Then
+		Messagebox Getthreadinfo(10) & ">>>" & Getthreadinfo(1) & " : Error on Line:" & Cstr(Erl) & " ( " & Err & ": " & Error$ & " )"
+		Resume exit_hand
+	End If
+
+End Sub
+
+
+'++LotusScript Development Environment:2:1:CheckConfig:1:8
+Function CheckConfig() As Boolean
+	CheckConfig=False
+	
+	On Error GoTo err_hand
+
+	Dim i As Integer
+
+	Dim dbSource As NotesDatabase
+	Dim dbTarget As NotesDatabase
+	
+	Set dbSource=session.getDatabase(doc.SourceDBServer(0), doc.SourceDBFilePath(0), False)
+	Set dbTarget=session.getDatabase(doc.TargetDBServer(0), doc.TargetDBFilePath(0), False)
+
+	If Not (dbTarget Is Nothing) Then
+		MessageBox "Target database exists!", 16, "Error"
+		Exit function
+	End If
+
+	For i=1 To FORMSROWCOUNT
+		If doc.getItemValue("sForm_" & i)(0)<>"" Then
+			If Not IsNumeric(doc.getItemValue("sPercent_" & i)(0)) Then
+				MessageBox "Invalid Percentage at row #" & i & "!", 16, "Error"
+				Exit Function				
+			End If 
+		End If
+	Next
+
+	CheckConfig=True
+exit_hand:
+	Exit Function
+err_hand:
+	On Error Resume Next
+	
+	If Err>0 Then
+		MessageBox GetThreadInfo(10) & ">>>" & GetThreadInfo(1) & " : Error on Line:" & CStr(Erl) & " ( " & Err & ": " & Error$ & " )"
+		Resume exit_hand
+	End If
+	
+
+
+End Function
+
+'++LotusScript Development Environment:2:1:SelectDB:1:8
+Function SelectDB(fieldPrefix As String, msgPrompt As String) As Boolean
+	On Error GoTo err_hand
+	SelectDB=False	
+	
+	Dim result
+	
+	result=ws.Prompt(PROMPT_CHOOSEDATABASE, "Select Database", msgPrompt)
+	
+	If IsEmpty(result) Then
+		GoTo exit_hand
+	End If
+	
+	Call doc.ReplaceItemValue(fieldPrefix+"Server", result(0))
+	Call doc.ReplaceItemValue(fieldPrefix+"FilePath", result(1))
+	Call doc.ReplaceItemValue(fieldPrefix+"Title", result(2))
+	
+	SelectDB=True
+exit_hand:
+	Exit Function
+err_hand:
+	On Error Resume Next
+	
+	If Err>0 Then
+		MessageBox GetThreadInfo(10) & ">>>" & GetThreadInfo(1) & " : Error on Line:" & CStr(Erl) & " ( " & Err & ": " & Error$ & " )"
+		Resume exit_hand
+	End If	
+End Function
+
+
+'++LotusScript Development Environment:2:1:GetFormNames:1:8
+Function GetFormNames(db As NotesDatabase) As Variant
+
+	Dim formNames() As String
+	Dim i As Integer
+	
+	ReDim FormNames(LBound(db.Forms) To UBound(db.Forms))
+	
+	For i=LBound(FormNames) To UBound(FormNames)
+		FormNames(i)=db.Forms(i).Name
+	Next
+	
+	GetFormNames=FormNames
+End Function
+
+'++LotusScript Development Environment:2:1:CopyDocumentsByForm:1:8
+Function CopyDocumentsByForm(dbSource As NotesDatabase, dbTarget As NotesDatabase, FormName As String, Percent As Single) As Boolean
+	On Error GoTo err_hand
+	CopyDocumentsByForm=False
+	
+	Dim sDocs As NotesDocumentCollection
+	Dim sDoc As NotesDocument
+	
+	Dim numbers List As Boolean
+	Dim totalCount As Long
+	Dim targetCount As Long
+	
+	
+
+	CopyDocumentsByForm=True
+exit_hand:
+	Exit Function
+err_hand:
+	On Error Resume Next
+	
+	If Err>0 Then
+		MessageBox GetThreadInfo(10) & ">>>" & GetThreadInfo(1) & " : Error on Line:" & CStr(Erl) & " ( " & Err & ": " & Error$ & " )"
+		Resume exit_hand
+	End If
+End Function
