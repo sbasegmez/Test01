@@ -1,0 +1,30 @@
+.involveCommentsErrorPanel {text-align:center;}
+.involveCommentsMain {}
+
+.involveCommentListCommentDisabledText {color:#666666;}
+.involveCommentList {}
+
+.involveCommentListWrapper { padding:2px; }
+.involveCommentListSubHeader {color:blue; font-weight:bold; margin:5px;}
+.involveCommentListSubHeader a:visited, .involveCommentListSubHeader a:link {color:inherit; text-decoration:underline;}
+.involveCommentListSubHeaderText {margin-right:20px; display:inline-block;}
+.involveCommentListSubHeaderAction {}
+
+.involveCommentHeader { font-size:0.9em; border-bottom:1px solid #EEEEEE; }
+.involveCommentListItem { margin:3px; padding:0px 0px 0px 10px; background:#F0F0F0; border:1px solid #F0F0F0}
+.involveCommentListItemInside { background-color:white;padding:1px 0px 1px 5px;}
+.involveCommentListItemAlt {}
+.involveCommentUser { margin-right:10px; font-weight:bold; color:#666666; display:inline-block;} 
+.involveCommentDate { color:#BBBBBB; }
+div.involveCommentNew { padding-right:10px; }
+.involveCommentNewActionContainer { margin:5px 0px 5px 0px; }
+.involveCommentNewAction {font-size: 0.8em; margin-right:12px; }
+
+.involveCommentListItemNew { background:#FF4500; }
+textarea.involveCommentNew {width:100%; height: 5em; border:0px;font-size:1em;}
+a.involveCommentNewAction:visited, a.involveCommentNewAction:link { color:blue; }
+
+.involveCommentContent { padding:3px 0px 3px 0px;}
+
+.involveCommentListMoreLink { text-align: right; font-style: italic; }
+.involveCommentListMoreLink ul { list-style: none; }

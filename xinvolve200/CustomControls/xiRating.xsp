@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+// xInvolve Project - xiRating Custom Control
+// Version: 2.00 - 2012.05.15
+// Developer: Serdar Basegmez, Developi Information Systems, http://lotusnotus.com/en
+ -->
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" dojoParseOnLoad="true" dojoTheme="true" xmlns:xe="http://www.ibm.com/xsp/coreex">
+	<xp:this.resources>
+		<xp:dojoModule name="dojox.form.Rating"></xp:dojoModule>
+		<xp:dojoModule name="dijit.Tooltip"></xp:dojoModule>
+		<xp:script src="/xInvolve.jss" clientSide="false"></xp:script>
+		<xp:script src="/xInvolveClient.js" clientSide="true"></xp:script>
+		<xp:styleSheet href="/.ibmxspres/dojoroot/dojox/form/resources/Rating.css"></xp:styleSheet>
+		<xp:styleSheet href="${javascript:compositeData.customCSS || '/xinvolveRating.css'}"></xp:styleSheet>
+	</xp:this.resources>
+	
+	<xp:this.beforePageLoad><![CDATA[#{javascript:invTools.handleAnonymous()}]]></xp:this.beforePageLoad>
+	
+	
+	<xp:div id="noshow" styleClass="involveRatingErrorPanel">
+		<xp:this.rendered><![CDATA[#{javascript:(!invTools.checkConfig(compositeData, invTools.TYPE_RATING)) && (!compositeData.hideError)}]]></xp:this.rendered>
+		<xp:image id="image1" url="/.ibmxspres/global/theme/oneui/images/iconError.gif"></xp:image>
+	</xp:div>
+	<xp:panel id="main" rendered="#{javascript:invTools.checkConfig(compositeData, invTools.TYPE_RATING)}" styleClass="involveRatingMain">
+		<xp:panel id="ratingPanel" styleClass="involveRatingPanel">
+			<xp:div styleClass="involveLoadingImgPanel" style="display:none"></xp:div>
+			<xp:span id="ratingShowWrapper" styleClass="involveRatingShowWrapper">
+				<xp:div id="ratingReadonly" styleClass="involveRatingStarWrapper">
+					<xp:this.rendered><![CDATA[#{javascript:(! invTools.isRatingEnabled(compositeData))}]]></xp:this.rendered>
+					<xp:repeat id="repeat1" first="0" indexVar="starIndex" rows="100" var="starClass" style="display:inline">
+						<xp:this.value><![CDATA[#{javascript:invTools.getRepeatArray(compositeData)}]]></xp:this.value>
+						<xp:image id="image2" styleClass="dojoxRatingStar #{javascript:starClass}" url="/.ibmxspres/global/theme/common/images/transparent.gif"></xp:image>
+					</xp:repeat>
+				</xp:div><!-- end-ratingReadonly -->
+				<xp:div id="ratingEditable" styleClass="involveRatingStarWrapper">
+					<xp:this.rendered><![CDATA[#{javascript:invTools.isRatingEnabled(compositeData)}]]></xp:this.rendered>
+					<xp:div id="rateThis" dojoType="dojox.form.CustomRating">
+						<xp:this.dojoAttributes>
+							<xp:dojoAttribute name="numStars"
+								value="#{javascript:compositeData.starCount || invTools.defaults.starCount}">
+							</xp:dojoAttribute>
+							<xp:dojoAttribute name="onchange" value="setRating('#{compositeData.ccId}', '#{id:ratingPanel}', this.value)"></xp:dojoAttribute>
+							<xp:dojoAttribute name="value" value="#{javascript:Math.round(invTools.getTotalRating(compositeData.ccId))}"></xp:dojoAttribute>
+						</xp:this.dojoAttributes>
+					</xp:div>
+					<xe:jsonRpcService id="ratingRpcService1" serviceName="rating#{compositeData.ccId}" state="true">
+						<xe:this.methods>
+							<xe:remoteMethod name="setRating" script="return invTools.setRating(compositeData,rating);">
+								<xe:this.arguments>
+									<xe:remoteMethodArg name="rating" type="number"></xe:remoteMethodArg>
+								</xe:this.arguments>
+							</xe:remoteMethod>
+						</xe:this.methods>
+					</xe:jsonRpcService>
+				</xp:div><!-- end-ratingEditable -->
+			</xp:span><!-- end-ratingShowWrapper -->
+			<xp:div dojoType="dijit.Tooltip" style="display:none">
+				<xp:this.rendered><![CDATA[#{javascript:return ! compositeData.ratingResultTarget}]]></xp:this.rendered>
+				<xp:this.dojoAttributes>
+					<xp:dojoAttribute name="connectId" value="#{id:ratingShowWrapper}"></xp:dojoAttribute>
+					<xp:dojoAttribute name="showDelay" value="500"></xp:dojoAttribute>
+				</xp:this.dojoAttributes>
+				<xp:text escape="false" id="involveRatingDetail">
+					<xp:this.value><![CDATA[#{javascript:@Implode(invTools.getRatingDetail(compositeData), "<br/>")}]]></xp:this.value>
+				</xp:text>
+			</xp:div>
+			<xp:span id="errShow" rendered="#{javascript:invTools.getErrorMessage(compositeData.ccId)!=''}">
+				<xp:image id="image3" alt="#{javascript:invTools.getErrorMessage(compositeData.ccId)}"
+					title="#{javascript:invTools.getErrorMessage(compositeData.ccId)}" url="/.ibmxspres/global/theme/oneui/images/iconError.gif">
+				</xp:image>
+			</xp:span><!-- end-errShow -->
+			<xp:eventHandler event="onClientLoad" submit="false">
+				<xp:this.script><![CDATA[dojo.addOnLoad(function() { fillInRatingResult("#{javascript:compositeData.ratingResultTarget}", "#{javascript:@Implode(invTools.getRatingDetail(compositeData), " ")}"); });]]></xp:this.script>
+			</xp:eventHandler>
+		</xp:panel><!-- end-ratingPanel -->
+	</xp:panel><!-- end-mainPanel -->
+</xp:view>

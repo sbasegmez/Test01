@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xe="http://www.ibm.com/xsp/coreex">
+
+	<xe:applicationLayout id="applicationLayout1">
+		<xp:callback facetName="facetMiddle" id="facetMiddle"></xp:callback>
+		<xe:this.facets>
+			<xp:callback facetName="facetLeft" id="facetLeft" xp:key="LeftColumn"></xp:callback>
+		</xe:this.facets>
+		<xe:this.configuration>
+			<xe:oneuiApplication footer="false" placeBar="false" legal="false" titleBar="false">
+				<xe:this.bannerUtilityLinks>
+					<xe:userTreeNode>
+						<xe:this.label><![CDATA[#{javascript:@Name("[CN]", session.getEffectiveUserName())}]]></xe:this.label>
+					</xe:userTreeNode>
+					<xe:basicLeafNode>
+						<xe:this.label><![CDATA[#{javascript:session.getEffectiveUserName()=="Anonymous"?"Login":"Logout"}]]></xe:this.label>
+						<xe:this.href><![CDATA[#{javascript:url=context.getUrl();
+url2=new XSPUrl(url.toString());
+
+url2.removeAllParameters();
+url2.setPath("/names.nsf");
+url2.setParameter((session.getEffectiveUserName()=="Anonymous")?"login":"logout","");
+url2.setParameter("redirectto", url.getPath()+url.getQueryString())
+
+url2.toString()}]]></xe:this.href>
+						<xe:this.rendered><![CDATA[#{javascript:@ClientType()!="Notes"}]]></xe:this.rendered>
+					</xe:basicLeafNode>
+				</xe:this.bannerUtilityLinks>
+				<xe:this.bannerApplicationLinks>
+					<xe:basicLeafNode label="xInvolve Sample Database"></xe:basicLeafNode>
+				</xe:this.bannerApplicationLinks></xe:oneuiApplication>
+		</xe:this.configuration>
+	</xe:applicationLayout></xp:view>

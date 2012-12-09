@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="3.0" replicaid="C225797A0044619D" version="8.5" xmlns="http://www.lotus.com/dxl">
-<noteinfo noteid="182" sequence="2" unid="7E0FF4AFF5C28D88C2257A78003EE153">
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="3.3" replicaid="C225797A0044619D" version="8.5" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="182" sequence="4" unid="7E0FF4AFF5C28D88C2257A78003EE153">
 <created><datetime dst="true">20120913T142649,15+03</datetime></created>
-<modified><datetime dst="true">20120913T142649,18+03</datetime></modified>
-<revised><datetime dst="true">20120913T142649,17+03</datetime></revised>
-<lastaccessed><datetime dst="true">20120913T142649,17+03</datetime></lastaccessed>
+<modified><datetime dst="true">20120913T142651,97+03</datetime></modified>
+<revised><datetime dst="true">20120913T142651,96+03</datetime></revised>
+<lastaccessed><datetime dst="true">20120913T142651,96+03</datetime></lastaccessed>
 <addedtofile><datetime dst="true">20120913T142649,15+03</datetime></addedtofile></noteinfo>
 <updatedby><name>CN=Serdar Basegmez/O=developi</name></updatedby>
 <wassignedby><name>CN=Serdar Basegmez/O=developi</name></wassignedby>
@@ -11,4 +11,10 @@
 <item name="$TITLE"><text>Tes01.xsp</text></item>
 
 
-<item name="$FileNames" sign="true"><text>Tes01.xsp</text></item></note>
+<item name="$FileNames" sign="true"><text>Tes01.xsp</text></item>
+<item name="$DesignerVersion"><text>8.5</text></item>
+
+
+
+
+</note>

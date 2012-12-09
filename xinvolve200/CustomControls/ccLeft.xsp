@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom" style="margin:4px;">
+	<xp:text escape="true" id="computedField2" value="My Favorites" tagName="h3"></xp:text>
+	<xp:br></xp:br>
+	<xc:xiMyFavorites id="myFavorites" ccId="favlist">
+		<xp:this.facets>
+			<xp:link xp:key="listItem" text="#{favEntry.hint}" style="margin-left:5.0px" id="link1">
+				<xp:eventHandler event="onclick" submit="false">
+					<xp:this.script><![CDATA[alert('Favorite #{javascript:favIndex} Clicked: \n\nid:#{javascript:favEntry.id}\nhint:#{javascript:favEntry.hint}')]]></xp:this.script>
+				</xp:eventHandler>
+			</xp:link>
+		</xp:this.facets>
+	</xc:xiMyFavorites></xp:view>

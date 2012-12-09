@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="3.3" replicaid="C225794D003BE64C" version="8.5" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="20a" sequence="93" unid="7637045E0DDA6C6FC225799D0060768F">
+<created><datetime>20120207T193338,07+02</datetime></created>
+<modified><datetime dst="true">20120514T170005,15+03</datetime></modified>
+<revised><datetime dst="true">20120514T170005,13+03</datetime></revised>
+<lastaccessed><datetime dst="true">20120514T170005,13+03</datetime></lastaccessed>
+<addedtofile><datetime>20120207T193338,09+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Serdar Basegmez/O=developi</name></updatedby>
+<wassignedby><name>CN=Serdar Basegmez/O=developi</name></wassignedby>
+<item name="$MimeType" sign="true"><text>text/css</text></item>
+<item name="$Flags"><text>34C=Q</text></item>
+<item name="$MimeCharSet" sign="true"><text>UTF-8</text></item>
+<item name="$TITLE" sign="true"><text>xinvolveComments.css</text></item>
+<item name="$Comment" sign="true"><text>version 2.0 (20120515)</text></item>
+<item name="$DesignerVersion"><text>8.5.3</text></item>
+
+
+<item name="$FileNames" sign="true"><text>xinvolveComments.css</text></item></note>

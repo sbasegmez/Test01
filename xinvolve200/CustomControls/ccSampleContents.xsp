@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:this.data>
+		<xp:dominoView var="contents" viewName="sampleContents"></xp:dominoView>
+	</xp:this.data>
+	<xp:this.dataContexts>
+		<xp:dataContext var="baseUrl">
+			<xp:this.value><![CDATA[#{javascript:context.getUrl().toString().split(view.getPageName())[0]}]]></xp:this.value>
+		</xp:dataContext>
+	</xp:this.dataContexts>
+	<xp:button value="New Content" id="button1">
+		<xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+			<xp:this.action>
+				<xp:openPage name="/contentEdit.xsp"></xp:openPage>
+			</xp:this.action>
+		</xp:eventHandler>
+	</xp:button>
+	<xp:br></xp:br>
+	<xp:br></xp:br>
+	<xp:viewPanel rows="30" id="viewPanel1" viewStyle="width:500px" value="#{contents}" var="viewEntry">
+		<xp:this.facets>
+			<xp:pager partialRefresh="true" layout="Previous Group Next" xp:key="headerPager" id="pager1"></xp:pager>
+		</xp:this.facets>
+		<xp:viewColumn columnName="$2" id="viewColumn1" style="width:auto">
+			<xp:viewColumnHeader value="Date" id="viewColumnHeader1"></xp:viewColumnHeader>
+		</xp:viewColumn>
+		<xp:viewColumn columnName="Title" id="viewColumn2" displayAs="link">
+			<xp:this.pageUrl><![CDATA[#{javascript:baseUrl+"/contentEdit.xsp?documentId="+viewEntry.getUniversalID()}]]></xp:this.pageUrl>
+			<xp:viewColumnHeader value="Title" id="viewColumnHeader2"></xp:viewColumnHeader>
+		</xp:viewColumn>
+		<xp:viewColumn id="viewColumn3" value="" style="text-align:center;">
+			<xp:this.facets>
+				<xp:viewColumnHeader xp:key="header" id="viewColumnHeader3" value="Rating" style="text-align:center"></xp:viewColumnHeader>
+			</xp:this.facets>
+			<div style="float:right">
+				<!-- Be careful not to confuse ccId's... Ratings are r0, r1... and Favorites are f0, f1... -->
+				<xc:xiRating starCount="5" hideError="false" ccId="#{javascript:'r'+viewEntry.getPosition()}" ratesDisplayOnly="false"
+					ratingTargetDocumentId="#{javascript:viewEntry.getUniversalID()}" ratingTargetFieldName="RatingValue">
+					<xc:this.iId><![CDATA[#{javascript:viewEntry.getUniversalID()}]]></xc:this.iId>
+				</xc:xiRating>
+			</div>
+		</xp:viewColumn>
+		<xp:viewColumn id="viewColumn4" value="" style="text-align:center;">
+			<xp:this.facets>
+				<xp:viewColumnHeader xp:key="header" id="viewColumnHeader4" value="Favorite"></xp:viewColumnHeader>
+			</xp:this.facets>
+			<div style="float:right">
+				<!-- Be careful not to confuse ccId's... Ratings are r0, r1... and Favorites are f0, f1... -->
+				<xc:xiAddToFavorites hideError="false" img_AddToFavorites="/rating_empty.gif" img_RemoveFromFavorites="/rating_full.gif"
+					ccId="#{javascript:'f'+viewEntry.getPosition()}" listContainerId="#{id:myFavorites}">
+					<xc:this.iId><![CDATA[#{javascript:viewEntry.getUniversalID()}]]></xc:this.iId>
+					<xc:this.hintValue><![CDATA[#{javascript:viewEntry.getColumnValue("Title")}]]></xc:this.hintValue>
+				</xc:xiAddToFavorites>
+			</div>
+		</xp:viewColumn>
+	</xp:viewPanel>
+</xp:view>

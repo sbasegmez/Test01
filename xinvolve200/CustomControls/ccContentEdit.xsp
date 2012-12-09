@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:this.data>
+		<xp:dominoDocument var="content" formName="content" action="editDocument"></xp:dominoDocument>
+	</xp:this.data>
+	<xp:panel style="width:75%">
+		<xp:button value="Submit" id="button1">
+			<xp:eventHandler event="onclick" submit="true" refreshMode="complete" immediate="false" save="true" id="eventHandler1">
+			</xp:eventHandler>
+		</xp:button>
+		<xp:button value="Close" id="button2">
+			
+		<xp:eventHandler event="onclick" submit="true" refreshMode="complete">
+			<xp:this.action>
+				<xp:openPage name="$$HomePage"></xp:openPage>
+			</xp:this.action></xp:eventHandler></xp:button>
+		<xp:panel styleClass="lotusRight">
+			<xc:xiAddToFavorites hideError="false" img_AddToFavorites="/graystar32.png" img_RemoveFromFavorites="/yellowstar32.png"
+				ccId="fav1" listContainerId="#{id:myFavorites}" iId="#{javascript:content.getDocument().getUniversalID()}">
+				<xc:this.hintValue><![CDATA[#{javascript:content.getItemValueString("Title")}]]></xc:this.hintValue>
+			</xc:xiAddToFavorites>
+		</xp:panel></xp:panel>
+	
+	
+	<xp:br></xp:br>
+	<xp:panel style="width:75%" styleClass="lotusWarning">
+		<xp:label
+			value="Note: This is just a sample. Never use rating control in edit mode if you are using persistent ratings. If you submit document after rating, conflict will be created."
+			id="label1">
+		</xp:label></xp:panel>
+	
+	
+	<xp:br></xp:br>
+	
+	<xp:table style="width:75%">
+		<xp:tr>
+			<xp:td>
+				<xp:label value="Title:" id="title_Label1" for="title1"></xp:label>
+			</xp:td>
+			<xp:td>
+				<xp:inputText value="#{content.Title}" id="title1" style="width:50%; float:left;"></xp:inputText>
+				<xp:panel style="float:right;">
+					<xc:xiRating ccId="rating" hideError="false" interactionDB="#{javascript:database.getFilePath()}" starCount="5"
+						rendered="#{javascript:!content.isNewNote()}" ratesDisplayOnly="false" anonymousRating="true"
+						ratingTargetDocumentId="#{javascript:content.getDocument().getUniversalID()}" ratingTargetFieldName="AverageRating">
+						<xc:this.iId><![CDATA[#{javascript:content.getDocument().getUniversalID()}]]></xc:this.iId>
+					</xc:xiRating>
+				</xp:panel>
+			</xp:td>
+			<xp:td></xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td valign="top">
+				<xp:label value="Content:" id="content_Label1" for="content1"></xp:label>
+			</xp:td>
+			<xp:td>
+				<xp:inputRichText value="#{content.Content}" id="content1"></xp:inputRichText>
+			</xp:td>
+			<xp:td></xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td></xp:td>
+			<xp:td></xp:td>
+			<xp:td></xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td colspan="2">
+				<xc:xiComments ccId="comment" hideError="false" rendered="#{javascript:!content.isNewNote()}"
+					text_CommentDisabled="Login to comment">
+					<xc:this.iId><![CDATA[#{javascript:content.getDocument().getUniversalID()}]]></xc:this.iId>
+					<xc:this.interactionDB><![CDATA[#{javascript:database.getFilePath()}]]></xc:this.interactionDB>
+				</xc:xiComments>
+			</xp:td>
+			<xp:td></xp:td>
+		</xp:tr>
+		<xp:tr>
+			<xp:td></xp:td>
+			<xp:td></xp:td>
+			<xp:td></xp:td>
+		</xp:tr>
+	</xp:table>
+	<xp:this.navigationRules>
+		<xp:navigationRule outcome="xsp-success" viewId="/sampleContents.xsp"></xp:navigationRule>
+	</xp:this.navigationRules>
+</xp:view>

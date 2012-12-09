@@ -1,0 +1,24 @@
+
+/* Customization for Dojo Rating Control... */
+.dojoxRatingStar{ 
+	/* background-image: url(graystar16.png); width:16px; height:16px;  /* Sample */
+}
+.dojoxRatingStarChecked { 
+	/* background-image: url(yellowstar16.png)  /* Sample */ 
+}
+.dojoxRatingStarHover { 
+	
+}
+
+/* Customization for Rating Panels... */
+.involveRatingErrorPanel {text-align:center;}
+.involveRatingMain {display:inline-block; text-align:center; }
+.involveRatingPanel {}
+.involveLoadingImgPanel { 
+	background: url(/xsp/.ibmxspres/global/theme/oneui/images/loading.gif) no-repeat center white;
+	height:16px;
+	opacity:0.5;
+}
+.involveRatingShowWrapper {vertical-align:top; }
+.involveRatingStarWrapper {display:inline; }
+

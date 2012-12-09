@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		// xInvolve Project - xiComments Custom Control 
+		// Version: 2.00 - 2012.05.15 
+		// Developer: Serdar Basegmez, Developi Information Systems, http://lotusnotus.com/en
+	-->
+<xp:view xmlns:xp="http://www.ibm.com/xsp/core" dojoParseOnLoad="true" dojoTheme="true" xmlns:xe="http://www.ibm.com/xsp/coreex"
+	xmlns:xc="http://www.ibm.com/xsp/custom">
+	<xp:this.resources>
+		<xp:script src="/xInvolve.jss" clientSide="false"></xp:script>
+		<xp:script src="/xInvolveClient.js" clientSide="true"></xp:script>
+		<xp:styleSheet href="${javascript:compositeData.customCSS || '/xinvolveComments.css'}"></xp:styleSheet>
+	</xp:this.resources>
+	<xp:div id="noshow" styleClass="involveCommentsErrorPanel">
+		<xp:this.rendered><![CDATA[#{javascript:(!invTools.checkConfig(compositeData, invTools.TYPE_COMMENTS)) && (!compositeData.hideError)}]]></xp:this.rendered>
+		<xp:image id="image1" url="/.ibmxspres/global/theme/oneui/images/iconError.gif"></xp:image>
+	</xp:div>
+	<xp:panel id="commentsMain" rendered="#{javascript:invTools.checkConfig(compositeData, invTools.TYPE_COMMENTS)}" styleClass="involveCommentsMain">
+		<xp:div id="commentsList" styleClass="involveCommentList">
+			<xp:div id="commentListWrapper" styleClass="involveCommentListWrapper">
+				<xp:div styleClass="involveCommentListSubHeader">
+					<xp:text escape="true" styleClass="involveCommentListSubHeaderText" disableTheme="true"
+						value="#{javascript:invTools.getCommentDetail(compositeData)}">
+					</xp:text>
+					<xp:text escape="true" styleClass="involveCommentListCommentDisabledText" rendered="#{javascript:!invTools.canWeComment(compositeData)}"
+						disableTheme="true" value="#{compositeData.text_CommentDisabled}">
+					</xp:text>
+					<xp:link styleClass="involveCommentListSubHeaderAction" id="commentNewButton" rendered="#{javascript:invTools.canWeComment(compositeData)}"
+						text="#{javascript:compositeData.text_CommentsAdd || invTools.defaults.text_CommentsAdd}" onclick="displayNewComment('#{id:commentsList}')"
+						value="javascript:">
+					</xp:link>
+				</xp:div>
+				<xp:div id="commentNewContainer" styleClass="involveCommentListItem involveCommentListItemNew" style="display:none; opacity:0;"
+					rendered="#{javascript:invTools.canWeComment(compositeData)}">
+					<div class="involveCommentListItemInside">
+						<div class="involveCommentContent involveCommentNew">
+							<xp:inputTextarea id="newComment" styleClass="xspText involveCommentNew"></xp:inputTextarea>
+						</div>
+						<div class="involveCommentNewActionContainer">
+							<xe:djButton label="#{javascript:(compositeData.text_CommentsAdd || invTools.defaults.text_CommentsAdd)}" id="djButton1"
+								styleClass="involveCommentNewAction" onClick="submitComment('#{compositeData.ccId}', '#{id:commentsList}');">
+							</xe:djButton>
+							<xp:link escape="true" id="link1" styleClass="involveCommentNewAction"
+								text="#{javascript:(compositeData.text_CommentsCancel || invTools.defaults.text_CommentsCancel)}" onclick="hideNewComment('#{id:commentsList}')"
+								value="javascript:">
+							</xp:link>
+						</div>
+					</div>
+				</xp:div>
+				<xp:repeat id="commentsRepeat" rows="#{javascript:(compositeData.commentDefaultRowCount || invTools.defaults.commentDefaultRowCount)}"
+					var="commentItem" indexVar="commentIndex" value="#{javascript:invTools.getComments(compositeData)}">
+					<xp:div id="commentListItem" styleClass="#{javascript:'involveCommentListItem'+(commentIndex%2==0?'':' involveCommentListItemAlt')}">
+						<div class="involveCommentListItemInside">
+							<div class="involveCommentHeader">
+								<span class="involveCommentUser">
+									<xc:xiCustomName userName="#{commentItem.username}"></xc:xiCustomName>
+								</span>
+								<xp:label styleClass="involveCommentDate" value="#{commentItem.cDate}"></xp:label>
+							</div>
+							<div class="involveCommentContent">
+								<xp:text escape="false" id="computedField1" value="#{commentItem.comment}"></xp:text>
+							</div>
+						</div>
+					</xp:div>
+				</xp:repeat>
+				<xe:pagerAddRows id="pagerAddRows1" for="commentsRepeat" refreshPage="true"
+					rowCount="#{javascript:(compositeData.commentDefaultRowCount || invTools.defaults.commentDefaultRowCount)}" text="#{javascript:(compositeData.text_CommentListMore || invTools.defaults.text_CommentListMore)}"
+					disabledFormat="hide" partialRefresh="true" refreshId="commentListWrapper" state="true" styleClass="involveCommentListMoreLink">
+				</xe:pagerAddRows>
+				<xe:jsonRpcService id="commentRpcService1" serviceName="comment#{compositeData.ccId}" state="true"
+					rendered="#{javascript:invTools.canWeComment(compositeData)}">
+					<xe:this.methods>
+						<xe:remoteMethod name="addComment" script="return invTools.addNewComment(compositeData,commentText);">
+							<xe:this.arguments>
+								<xe:remoteMethodArg name="commentText" type="string"></xe:remoteMethodArg>
+							</xe:this.arguments>
+						</xe:remoteMethod>
+					</xe:this.methods>
+				</xe:jsonRpcService>
+			</xp:div>
+		</xp:div>
+	</xp:panel><!-- end-mainPanel -->
+</xp:view>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><note class="form" maintenanceversion="3.3" replicaid="C225794D003BE64C" version="8.5" xmlns="http://www.lotus.com/dxl">
+<noteinfo noteid="2e2" sequence="81" unid="6DC6A8CA7A59D5A1C22579F600454D54">
+<created><datetime dst="true">20120506T153657,80+03</datetime></created>
+<modified><datetime dst="true">20120514T223827,15+03</datetime></modified>
+<revised><datetime dst="true">20120514T223827,13+03</datetime></revised>
+<lastaccessed><datetime dst="true">20120514T223827,13+03</datetime></lastaccessed>
+<addedtofile><datetime dst="true">20120506T153657,80+03</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Serdar Basegmez/O=developi</name></updatedby>
+<wassignedby><name>CN=Serdar Basegmez/O=developi</name></wassignedby>
+<item name="$Flags"><text>gC~4;</text></item>
+<item name="$TITLE" sign="true"><text>xiMyFavorites.xsp</text></item>
+
+<item name="$Comment" sign="true"><text>version 2.0 (20120515)</text></item>
+<item name="$DesignerVersion"><text>8.5</text></item>
+
+
+
+
+
+
+<item name="$FileNames" sign="true"><text>xiMyFavorites.xsp</text></item>
+
+</note>
